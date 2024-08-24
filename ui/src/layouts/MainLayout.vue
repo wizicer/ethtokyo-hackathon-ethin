@@ -59,7 +59,9 @@
     </q-drawer> -->
 
     <q-page-container>
-      <router-view />
+      <Suspense>
+        <router-view />
+      </Suspense>
     </q-page-container>
 
     <q-footer v-if="!$route.meta.hideNav" class="">
