@@ -41,6 +41,7 @@
 
           <template #addressButton>
             <!-- Use your own button to display the address when address is provided. Does not remove the pending transaction div -->
+            {{ nameOrAddress }}
           </template>
         </ConnectWalletButton>
       </q-toolbar>
@@ -114,9 +115,11 @@ const tab = ref('mails');
 const wallet = useMetaMaskWallet();
 
 const address = ref('');
+const nameOrAddress = ref('');
 
 wallet.onAccountsChanged((accounts: string[]) => {
   console.log('account changed to: ', accounts[0]);
+  nameOrAddress.value = accounts[0];
 });
 wallet.onChainChanged((chainId: number) => {
   console.log('chain changed to:', chainId);
@@ -129,6 +132,14 @@ const connect = async () => {
     console.log('An error occurred' + accounts);
   }
   address.value = accounts[0];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const name = await getEnsName(accounts[0] as any);
+  if (name) {
+    nameOrAddress.value = name;
+  } else {
+    nameOrAddress.value =
+      accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4);
+  }
 };
 
 const isConnected = async () => {
@@ -140,4 +151,19 @@ const isConnected = async () => {
 isConnected().then((value) => {
   if (value) connect();
 });
+
+import { http, createPublicClient } from 'viem';
+import { sepolia } from 'viem/chains';
+
+async function getEnsName(address: `0x${string}`) {
+  const client = createPublicClient({
+    chain: sepolia,
+    transport: http(),
+  });
+
+  const name = await client.getEnsName({
+    address: address,
+  });
+  return name;
+}
 </script>
