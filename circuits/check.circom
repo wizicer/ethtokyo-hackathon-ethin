@@ -1,6 +1,7 @@
 pragma circom 2.1.0;
 
 include "../node_modules/circomlib/circuits/mimcsponge.circom";
+include "../node_modules/circomlib/circuits/comparators.circom";
 
 template Main(MAX) {
     // public fields
@@ -12,7 +13,7 @@ template Main(MAX) {
     signal input height;
     signal input weight[MAX];
 
-    // calculate hash
+    // check hash
     component height_hasher;
     height_hasher = MiMCSponge(1, 220, 1);
     height_hasher.k <== 0;
@@ -26,6 +27,16 @@ template Main(MAX) {
         weight_hasher[i].ins[0] <== weight[i];
         weight_commitment[i] === weight_hasher[i].outs[0];
     }
+
+    // check weight decrease
+    component weight_decrease_comparator[MAX - 1];
+    for (var i = 2; i < MAX; i++) {
+        weight_decrease_comparator[i-1] = LessThan(16);
+        weight_decrease_comparator[i-1].in[0] <== weight[i];
+        weight_decrease_comparator[i-1].in[1] <== weight[i - 1];
+        weight_decrease_comparator[i-1].out === 1;
+    }
+
 }
 
 component main{public [pubkey, height_commitment, weight_commitment]} = Main(10);
