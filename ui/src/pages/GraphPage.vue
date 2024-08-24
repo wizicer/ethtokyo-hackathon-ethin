@@ -22,7 +22,7 @@ defineOptions({
 });
 const options = ref({
   title: {
-    text: 'ApexLine',
+    text: 'Graph',
     align: 'left',
   },
   chart: {
@@ -36,13 +36,21 @@ const options = ref({
     },
   },
   xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+    categories: [
+      '2024-08-19',
+      '2024-08-20',
+      '2024-08-21',
+      '2024-08-22',
+      '2024-08-23',
+      '2024-08-24',
+      '2024-08-25',
+    ],
   },
 });
 const series = ref([
   {
     name: 'series-1',
-    data: [30, 40, 45, 50, 49, 60, 70, 91],
+    data: [88, 87, 86, 86, 87, 85, 85],
   },
 ]);
 </script>
