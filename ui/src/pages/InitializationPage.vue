@@ -102,7 +102,7 @@ async function submit() {
   initializing.value = true;
   try {
     const dt = L2Contract__factory.connect(
-      '0xFAb2eb4c3a204A201343A7Bb15E23d2Fffca8f94',
+      '0x698170b76f32eab533352ec5eac670a116f43a77',
       signer
     );
 
