@@ -4,8 +4,10 @@ pragma solidity ^0.8.0;
 // Interface for the verifier contract
 interface IVerifier {
   function verifyProof(
-    bytes memory proof,
-    bytes32[] memory publics
+    uint[2] calldata _pA,
+    uint[2][2] calldata _pB,
+    uint[2] calldata _pC,
+    uint[12] calldata _pubSignals
   ) external view returns (bool);
 }
 
@@ -13,16 +15,16 @@ contract L2Contract {
   struct Task {
     string name;
     string rule;
-    uint256 deadline;
+    uint deadline;
   }
 
-  mapping(uint256 => Task) private tasks;
-  uint256 private taskCounter;
+  mapping(uint => Task) private tasks;
+  uint private taskCounter;
 
   address public verifierContract;
-  mapping(bytes32 => bytes32) public heightCommitments;
-  mapping(bytes32 => mapping(uint256 => bytes32)) public dailyCommitments;
-  mapping(bytes32 => uint256[]) public submissionTimestamps;
+  mapping(uint => uint) public heightCommitments;
+  mapping(uint => mapping(uint => uint)) public dailyCommitments;
+  mapping(uint => uint[]) public submissionTimestamps;
 
   constructor(address _verifierContract) {
     verifierContract = _verifierContract;
@@ -31,7 +33,7 @@ contract L2Contract {
   function publish_task(
     string memory name,
     string memory rule,
-    uint256 deadline
+    uint deadline
   ) public {
     tasks[taskCounter] = Task(name, rule, deadline);
     taskCounter++;
@@ -39,14 +41,14 @@ contract L2Contract {
 
   function get_tasks() public view returns (Task[] memory) {
     Task[] memory taskList = new Task[](taskCounter);
-    for (uint256 i = 0; i < taskCounter; i++) {
+    for (uint i = 0; i < taskCounter; i++) {
       taskList[i] = tasks[i];
     }
     return taskList;
   }
 
-  // function get_tasks() public view returns (bytes32[] memory) {
-  //   bytes32[] memory tasks;
+  // function get_tasks() public view returns (uint[] memory) {
+  //   uint[] memory tasks;
 
   //   // address L1_SLOAD_ADDRESS = 0x101;
   //   //  (bool success, bytes memory ret) =L1_SLOAD_ADDRESS.staticcall(
@@ -60,25 +62,29 @@ contract L2Contract {
   // }
 
   function verify_task(
-    bytes32 pubkey,
-    bytes memory proof
+    uint pubkey,
+    uint[2] calldata _pA,
+    uint[2][2] calldata _pB,
+    uint[2] calldata _pC
   ) public view returns (bool) {
     IVerifier verifier = IVerifier(verifierContract);
-    uint256 dayNumber = block.timestamp / 1 days;
-    bytes32[] memory commitments = new bytes32[](30);
-    for (uint256 i = 0; i < 30; i++) {
-      commitments[i] = dailyCommitments[pubkey][dayNumber];
+    uint dayNumber = block.timestamp / 1 days;
+    uint[12] memory commitments;
+    commitments[0] = pubkey;
+    commitments[1] = heightCommitments[pubkey];
+    for (uint i = 0; i < 10; i++) {
+      commitments[i + 2] = dailyCommitments[pubkey][dayNumber];
     }
-    return verifier.verifyProof(proof, commitments);
+    return verifier.verifyProof(_pA, _pB, _pC, commitments);
   }
 
-  function create_account(bytes32 pubkey, bytes32 height_commitment) public {
+  function create_account(uint pubkey, uint height_commitment) public {
     require(heightCommitments[pubkey] == 0, 'Account already exists');
     heightCommitments[pubkey] = height_commitment;
   }
 
-  function submit_daily(bytes32 pubkey, bytes32 commitment) public {
-    uint256 dayNumber = block.timestamp / 1 days;
+  function submit_daily(uint pubkey, uint commitment) public {
+    uint dayNumber = block.timestamp / 1 days;
     require(
       dailyCommitments[pubkey][dayNumber] == 0,
       'Submission for today already exists'
@@ -88,14 +94,14 @@ contract L2Contract {
   }
 
   function get_daily_data(
-    bytes32 pubkey
-  ) public view returns (bytes32[] memory commitments, uint256[] memory dates) {
-    uint256 length = submissionTimestamps[pubkey].length;
-    commitments = new bytes32[](length);
-    dates = new uint256[](length);
+    uint pubkey
+  ) public view returns (uint[] memory commitments, uint[] memory dates) {
+    uint length = submissionTimestamps[pubkey].length;
+    commitments = new uint[](length);
+    dates = new uint[](length);
 
-    for (uint256 i = 0; i < length; i++) {
-      uint256 dayNumber = submissionTimestamps[pubkey][i];
+    for (uint i = 0; i < length; i++) {
+      uint dayNumber = submissionTimestamps[pubkey][i];
       commitments[i] = dailyCommitments[pubkey][dayNumber];
       dates[i] = dayNumber;
     }
