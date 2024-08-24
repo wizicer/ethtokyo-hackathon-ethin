@@ -7,29 +7,37 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/IndexPage.vue'),
+        redirect: 'init',
       },
       {
+        name: 'init',
         path: 'init',
+        meta: { hideNav: true },
         component: () => import('pages/InitializationPage.vue'),
       },
       {
+        name: 'input',
         path: 'input',
         component: () => import('pages/DailyInputPage.vue'),
       },
       {
+        name: 'graph',
         path: 'graph',
         component: () => import('pages/GraphPage.vue'),
       },
       {
+        name: 'leader',
         path: 'leader',
         component: () => import('pages/LeaderboardPage.vue'),
       },
       {
+        name: 'claim',
         path: 'claim',
+        meta: { hideNav: true },
         component: () => import('pages/ClaimNamePage.vue'),
       },
       {
+        name: 'reward',
         path: 'reward',
         component: () => import('pages/RewardPage.vue'),
       },

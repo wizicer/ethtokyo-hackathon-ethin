@@ -1,6 +1,6 @@
 <template>
-  <q-page class="column items-start">
-    <q-card class="q-mb-md">
+  <q-page class="column items-start q-ma-md">
+    <q-card class="q-mb-md full-width">
       <q-card-section class="row items-center">
         <div class="col">
           <div class="text-h6">{{ userName }}</div>
@@ -10,7 +10,7 @@
       </q-card-section>
     </q-card>
 
-    <q-list bordered class="scroll">
+    <q-list bordered class="scroll full-width">
       <q-item v-for="(task, index) in tasks" :key="index" clickable>
         <q-item-section>
           <q-item-label>{{ task.name }}</q-item-label>

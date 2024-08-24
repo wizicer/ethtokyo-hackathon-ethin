@@ -32,6 +32,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { QForm } from 'quasar';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 defineOptions({
   name: 'InitializationPage',
@@ -54,6 +56,7 @@ const handleSubmit = () => {
       height: height.value,
       weight: weight.value,
     });
+    router.push({ name: 'claim' });
   } else {
     // Handle form validation
     console.error('Please fill out all fields');

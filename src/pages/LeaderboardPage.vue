@@ -1,6 +1,6 @@
 <template>
-  <q-page class="column items-start">
-    <q-list bordered class="scroll">
+  <q-page class="column items-start q-ma-md">
+    <q-list bordered class="scroll full-width">
       <q-item v-for="(user, index) in leaderboard" :key="index" clickable>
         <q-item-section>
           <q-item-label>{{ user.name }}</q-item-label>

@@ -33,11 +33,32 @@
       <router-view />
     </q-page-container>
 
-    <q-footer class="">
+    <q-footer v-if="!$route.meta.hideNav" class="">
       <q-tabs v-model="tab" class="text-white">
-        <q-tab name="mails" icon="mail" label="" />
-        <q-tab name="alarms" icon="alarm" label="" />
-        <q-tab name="movies" icon="movie" label="" />
+        <q-route-tab
+          name="input"
+          icon="edit"
+          label=""
+          :to="{ name: 'input' }"
+        />
+        <q-route-tab
+          name="graph"
+          icon="show_chart"
+          label=""
+          :to="{ name: 'graph' }"
+        />
+        <q-route-tab
+          name="leader"
+          icon="workspace_premium"
+          label=""
+          :to="{ name: 'leader' }"
+        />
+        <q-route-tab
+          name="reward"
+          icon="card_giftcard"
+          label=""
+          :to="{ name: 'reward' }"
+        />
       </q-tabs>
     </q-footer>
   </q-layout>
