@@ -6,7 +6,7 @@
           <div class="text-h6">{{ userName }}</div>
           <div class="text-caption">{{ userPoints }} points</div>
         </div>
-        <q-badge color="primary" label="#{{ userRank }}" />
+        <q-badge color="primary" :label="'#' + userRank" />
       </q-card-section>
     </q-card>
 
@@ -44,7 +44,6 @@ defineOptions({
 const userName = ref('User Name');
 const userPoints = ref(120);
 const userRank = ref(5);
-console.log(userRank);
 
 const tasks = ref([
   { name: 'Task 1', summary: 'Summary of task 1' },
