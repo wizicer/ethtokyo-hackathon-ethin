@@ -41,13 +41,13 @@ defineOptions({
   name: 'RewardPage',
 });
 
-const userName = ref('User Name');
+const userName = ref('ethin.eth');
 const userPoints = ref(120);
 const userRank = ref(5);
 
 const tasks = ref([
-  { name: 'Task 1', summary: 'Summary of task 1' },
-  { name: 'Task 2', summary: 'Summary of task 2' },
+  { name: 'Decrease', summary: 'prove your weight decrease for 10 days' },
+  // { name: 'Task 2', summary: 'Summary of task 2' },
   // Add more tasks as needed
 ]);
 </script>
