@@ -8,10 +8,15 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "build:contracts": "forge build && typechain --target ethers-v6 --out-dir ui/src/contracts out/L2_Scroll_Contract.sol/*.json",
     "dev:ui": "cd ui && yarn dev",
     "build:ui": "cd ui && yarn build"
   },
   "workspaces": [
     "ui"
-  ]
+  ],
+  "dependencies": {
+    "@typechain/ethers-v6": "^0.5.1",
+    "typechain": "^8.3.2"
+  }
 }

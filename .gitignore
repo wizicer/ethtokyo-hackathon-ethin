@@ -35,3 +35,7 @@ yarn-error.log*
 
 # local .env files
 .env.local*
+
+out/
+cache/
+ui/src/contracts/
