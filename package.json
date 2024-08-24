@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "@typechain/ethers-v6": "^0.5.1",
+    "circomlib": "^2.0.5",
     "typechain": "^8.3.2"
   }
 }
